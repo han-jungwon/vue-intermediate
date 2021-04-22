@@ -1,7 +1,7 @@
 <template>
     <div>
-      <ul>
-        <li v-for="(todoItem, index) in propsdata" v-bind:key="todoItem.item" class="shadow">
+      <transitioon-group name="list" tag="ul">
+        <li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item" class="shadow">
           <i class="checkBtn fas fa-check" v-bind:class="{checkBtnCompleted: todoItem.completed}"
              v-on:click="toggleComplete(todoItem, index)"></i>
           <span v-bind:class="{textCompleted: todoItem.completed}"> {{ todoItem.item }} </span>
@@ -9,24 +9,18 @@
             <i class="fas fa-trash-alt"></i>
           </span>
         </li>
-      </ul>
+      </transitioon-group>
     </div>
 </template>
 
 <script>
 export default {
-  props: ['propsdata'],
   methods: {
-    removeTodo: function(todoItem, index) {
-      console.log(todoItem, index);
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
+    removeTodo(todoItem, index) {
+      this.$store.commit('removeOneItem', {todoItem, index});
     },
-    toggleComplete: function(todoItem, index) {
-      todoItem.completed = !todoItem.completed;
-      // 로컬 스토리지의 데이터를 갱신
-      localStorage.removeItem(todoItem.item);
-      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+    toggleComplete(todoItem, index) {
+      this.$store.commit('toggleOneItem', {todoItem, index});
     }
   }
 }
@@ -66,4 +60,14 @@ li {
   margin-left: auto;
   color: #de4343;
 }
+
+/* 리스트 아이템 트랜지션 효과 */
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 </style>

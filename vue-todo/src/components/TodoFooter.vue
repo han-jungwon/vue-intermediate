@@ -1,6 +1,6 @@
 <template>
   <div class="clearAllcontainer">
-    <span class="clearAlBtn" v-on:click="clearTodo">Clear All</span>
+    <span class="clearAllBtn" v-on:click="clearTodo">Clear All</span>
 
   </div>
 </template>
@@ -8,8 +8,8 @@
 <script>
 export default {
   methods: {
-    clearTodo: function() {
-      localStorage.clear();
+    clearTodo() {
+      this.$store.commit('clearAllItems');
     }
   }
 }
@@ -25,7 +25,7 @@ export default {
   border-radius: 5px;
   margin: 0 auto;
 }
-.clearAlBtn {
+.clearAllBtn {
   color: #e20303;
   display: block;
 }
